@@ -77,9 +77,19 @@ def main():
     pytorch_analyzer = load_pytorch_analyzer()
     rag_engine = setup_polish_rag()
 
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", project=project_id)
+    #llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", project=project_id)
 
     with st.sidebar:
+        st.header("🤖 Model Settings")
+        model_options = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-3.1-flash-lite-preview", "gemini-3.1-pro-preview"]
+        selected_model = st.selectbox(
+            "Select AI Model:", 
+            options=model_options, 
+            index=0, # Default to Flash
+            help="Flash is faster/cheaper. Pro is smarter for complex grammar."
+        )
+        st.divider()
+
         st.header("🔑 Authentication")
         user_api_key = st.text_input("Google AI API Key:", type="password", placeholder="AIza...")
         try:
@@ -92,10 +102,9 @@ def main():
                 st.sidebar.success("Using your API Key")
             else:
                 # OPTION B: Default to your Project ID (Vertex AI)
-                llm = ChatVertexAI(
-                    model_name="gemini-2.5-flash-lite", 
-                    project=project_id
-                )
+                llm = ChatGoogleGenerativeAI(
+                    model="gemini-2.5-flash-lite", 
+                    project=project_id)
                 st.sidebar.warning("Using Developer's Project ID")
         except Exception as e:
             st.error("Could not initialize AI. Please check your API key or Project settings.")
