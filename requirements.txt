@@ -10,3 +10,4 @@ sentence-transformers>=2.2.0
 
 # Document loaders
 pypdf>=3.17.0
+langchain-google-vertexai
